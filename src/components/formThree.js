@@ -5,14 +5,34 @@ import * as Yup from 'yup';
 const FormThree = () => {
 
     const formikProps = {
-        initialValues:{firstname:'',color:''},
+        initialValues:{firstname:'',color:'', lastname:''},
         validationSchema:Yup.object({
-            firstname:Yup.string().required('Sorry, this is required')
+            firstname:Yup.string().required('Sorry, this is required'),
+            lastname:Yup.string().required('Sorry, this is required')
         }),
         onSubmit: values => {
             console.log(values)
         }
     }
+
+
+    const myCustomComponent = ({
+        field, /// { name, value, onChange, onBlur}
+        form:{ touched, errors},
+        ...props
+    }) => (
+        <>
+            <label htmlFor={field.name}>{props.labelName}</label>
+            <input
+                type="text"
+                className="form-control"
+                {...field}
+            />
+            { errors[field.name] && touched[field.name] ?
+                 <span>{errors[field.name]}</span>
+            :null}
+        </>
+    )
 
 
     return(
@@ -28,6 +48,17 @@ const FormThree = () => {
                          <span>{formik.errors.firstname}</span>
                     :null}
                     
+                    <hr className="mb-4" />
+
+
+                    <Field
+                        name="lastname"
+                        component={myCustomComponent}
+                        placeholder="Last name"
+                        labelName="Enter your name"
+                    />
+
+
                     <hr className="mb-4" />
 
                     <label htmlFor="color">Color</label>
