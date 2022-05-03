@@ -13,6 +13,23 @@ const FormOne = () => {
           state:'',
           zip:''
         }}
+        validate={ values => {
+          const errors = {}
+
+          if(!values.firstname){
+            errors.firstname = 'Sorry, this is required'
+          }
+          if(!values.lastname){
+            errors.lastname = 'Sorry, this is required'
+          }
+          if(!values.email){
+            errors.email = 'Sorry, this is required'
+          } else if (!/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(values.email)){
+            errors.email = 'invalid email'
+          }
+
+          return errors;
+        }}
         onSubmit={()=>{
           console.log('Form submitted')
         }}
@@ -42,16 +59,30 @@ const FormOne = () => {
                       value={values.firstname}
                       onChange={handleChange}
                     />
+                    { errors.firstname ?
+                      <span>{errors.firstname}</span>
+                    :null}
                   </div>
                   <div className="col-md-6 mb-3">
                     <label htmlFor="lastname">Last name</label>
-                    <input type="text" className="form-control" id="lastname" name="lastname"/>
+                    <input type="text" className="form-control" id="lastname" name="lastname"
+                     value={values.lastname}
+                     onChange={handleChange}/>
+                    { errors.lastname ?
+                      <span>{errors.lastname}</span>
+                    :null}
                   </div>
                 </div>
         
                 <div className="mb-3">
                   <label htmlFor="email">Email</label>
-                  <input type="email" className="form-control" id="email" name="email" placeholder="you@example.com"/>
+                  <input type="email" className="form-control" id="email" name="email" placeholder="you@example.com"
+                  value={values.email}
+                  onChange={handleChange}
+                  />
+                    { errors.email ?
+                      <span>{errors.email}</span>
+                    :null}
                 </div>
         
           
