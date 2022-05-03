@@ -1,5 +1,6 @@
 
 import { Formik } from "formik";
+import * as Yup from 'yup';
 
 const FormOne = () => {
 
@@ -13,25 +14,18 @@ const FormOne = () => {
           state:'',
           zip:''
         }}
-        validate={ values => {
-          const errors = {}
-
-          if(!values.firstname){
-            errors.firstname = 'Sorry, this is required'
-          }
-          if(!values.lastname){
-            errors.lastname = 'Sorry, this is required'
-          }
-          if(!values.email){
-            errors.email = 'Sorry, this is required'
-          } else if (!/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(values.email)){
-            errors.email = 'invalid email'
-          }
-
-          return errors;
-        }}
-        onSubmit={()=>{
-          console.log('Form submitted')
+        validationSchema={Yup.object({
+          firstname: Yup
+          .string()
+          .required('Sorry, this is required')
+          .max(5,'Sorry the name is too long'),
+          lastname:Yup.string().required('Sorry, this is required'),
+          email:Yup.string()
+          .required('Sorry, this is required')
+          .email('Needs to be an email')
+        })}
+        onSubmit={(values)=>{
+          console.log(values)
         }}
       >
         { ({
@@ -59,7 +53,7 @@ const FormOne = () => {
                       value={values.firstname}
                       onChange={handleChange}
                     />
-                    { errors.firstname ?
+                    { errors.firstname && touched.firstname ?
                       <span>{errors.firstname}</span>
                     :null}
                   </div>
@@ -68,7 +62,7 @@ const FormOne = () => {
                     <input type="text" className="form-control" id="lastname" name="lastname"
                      value={values.lastname}
                      onChange={handleChange}/>
-                    { errors.lastname ?
+                    { errors.lastname && touched.lastname ?
                       <span>{errors.lastname}</span>
                     :null}
                   </div>
@@ -80,7 +74,7 @@ const FormOne = () => {
                   value={values.email}
                   onChange={handleChange}
                   />
-                    { errors.email ?
+                  { errors.email && touched.email ?
                       <span>{errors.email}</span>
                     :null}
                 </div>
@@ -89,7 +83,10 @@ const FormOne = () => {
                 <div className="row">
                   <div className="col-md-5 mb-3">
                     <label htmlFor="country">Country</label>
-                    <select className="custom-select d-block w-100" id="country" name="country">
+                    <select className="custom-select d-block w-100" id="country" name="country"
+                    value={values.country}
+                    onChange={handleChange}
+                    >
                       <option value="">Choose...</option>
                       <option value="US">United States</option>
                       <option value="CA">Canada</option>
@@ -99,7 +96,10 @@ const FormOne = () => {
                   </div>
                   <div className="col-md-4 mb-3">
                     <label htmlFor="state">State</label>
-                    <select className="custom-select d-block w-100" id="state" name="state">
+                    <select className="custom-select d-block w-100" id="state" name="state"
+                       value={values.state}
+                       onChange={handleChange}
+                    >
                       <option value="">Choose...</option>
                       <option value="california">California</option>
                       <option value="toronto">Toronto</option>
@@ -109,7 +109,10 @@ const FormOne = () => {
                   </div>
                   <div className="col-md-3 mb-3">
                     <label htmlFor="zip">Zip</label>
-                    <input type="text" className="form-control" id="zip" name="zip"/>
+                    <input type="text" className="form-control" id="zip" name="zip"
+                      value={values.zip}
+                      onChange={handleChange}
+                    />
                   </div>
                 </div>
         
